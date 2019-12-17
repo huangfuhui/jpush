@@ -2,6 +2,8 @@ package jpush
 
 import (
 	"encoding/base64"
+	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -10,6 +12,11 @@ import (
 
 func Auth(appKey, masterSecret string) string {
 	str := appKey + ":" + masterSecret
+	return fmt.Sprintf("Basic %s", base64.StdEncoding.EncodeToString([]byte(str)))
+}
+
+func GroupAuth(groupKey, masterSecret string) string {
+	str := "group-" + groupKey + ":" + masterSecret
 	return fmt.Sprintf("Basic %s", base64.StdEncoding.EncodeToString([]byte(str)))
 }
 
@@ -32,5 +39,15 @@ func Request(method, url string, body io.Reader, auth string) (result []byte, er
 	}()
 
 	result, err = ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return
+	}
+
+	if rsp.StatusCode != http.StatusOK {
+		failRsp := Fail{}
+		_ = json.Unmarshal(result, &failRsp)
+		err = errors.New(failRsp.String())
+	}
+
 	return
 }

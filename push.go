@@ -1,4 +1,4 @@
-package param
+package jpush
 
 const (
 	PlatformAndroid  = "android"
@@ -111,4 +111,9 @@ type Callback struct {
 	Url    string                 `json:"url,omitempty"`
 	Params map[string]interface{} `json:"params,omitempty"`
 	Type   string                 `json:"type,omitempty"`
+}
+
+type PushResult struct {
+	SendNo string `json:"sendno"`
+	MsgId  string `json:"msg_id"`
 }
