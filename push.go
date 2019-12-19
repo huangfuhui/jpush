@@ -1,6 +1,7 @@
 package jpush
 
 const (
+	PlatformAll      = "all"
 	PlatformAndroid  = "android"
 	PlatformIos      = "ios"
 	PlatFormWinphone = "winphone"
